@@ -2,19 +2,27 @@
 #define HDL_NORMAL_GATES_CPP
 
 #include "hdl_normal_gates.hpp"
+#include "check_inputs.cpp"
 #include <map>
 
 namespace hdl {
+  GateInstance::GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames):
+    gate(gate),inpNames(inpNames),otpNames(otpNames) {}
+  AliasedPins::AliasedPins(Pins pins,std::vector<PinIdentifier> names):
+    pins(pins),names(names) {}
+  NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates):
+    inps(inps),otps(otps),gates(gates) {}
   Pins NormalGate::getInps() { return inps.pins; }
   Pins NormalGate::getOtps() { return otps.pins; }
   PinValues NormalGate::getOtpValues(PinValues inpValues) { //TODO: check if inpValues are right size
+    checkInputs(*this,inpValues);
     std::map<PinIdentifier,PinValue> values;
     { char counter = 0;
       for (auto p: inps.names) values[p] = inpValues[counter++]; }
     for (auto g: gates) {
       PinValues inps;
       for (auto p: g.inpNames) inps.push_back(values[p]);
-      auto otps = g.gate->getOtpValues(inps);
+      auto otps = g.gate.getOtpValues(inps);
       { char counter = 0;
         for (auto p: otps) values[g.otpNames[counter++]] = p; }
     }

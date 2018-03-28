@@ -5,7 +5,7 @@
 #include <string>
 
 namespace hdl {
-  typedef int NumBinaryDigits;
+  typedef unsigned int NumBinaryDigits;
   typedef std::vector<NumBinaryDigits> Pins;
   typedef std::vector<bool> PinValue;
   typedef std::vector<PinValue> PinValues;
