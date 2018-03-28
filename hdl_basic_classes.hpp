@@ -5,8 +5,8 @@
 #include <string>
 
 namespace hdl {
-  typedef unsigned int NumBinaryDigits;
-  typedef std::vector<NumBinaryDigits> Pins;
+  typedef unsigned int Pin; //number of digits in this pin
+  typedef std::vector<Pin> Pins;
   typedef std::vector<bool> PinValue;
   typedef std::vector<PinValue> PinValues;
   struct Gate {

@@ -8,8 +8,20 @@
 namespace hdl {
   GateInstance::GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames):
     gate(gate),inpNames(inpNames),otpNames(otpNames) {}
+  AliasedPin::AliasedPin(Pin pin,PinIdentifier name):
+    pin(pin),name(name) {}
+  AliasedPins::AliasedPins(Pin pin,PinIdentifier name):
+    pins({pin}),names({name}) {}
   AliasedPins::AliasedPins(Pins pins,std::vector<PinIdentifier> names):
     pins(pins),names(names) {}
+  AliasedPins::AliasedPins(std::initializer_list<AliasedPin> args) {
+    for (auto p: args) {
+      pins.push_back(p.pin);
+      names.push_back(p.name);
+    }
+  }
+  NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate):
+    inps(inps),otps(otps),gates({gate}) {}
   NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates):
     inps(inps),otps(otps),gates(gates) {}
   Pins NormalGate::getInps() { return inps.pins; }

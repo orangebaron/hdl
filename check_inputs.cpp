@@ -3,6 +3,9 @@
 
 #include "hdl_basic_classes.hpp"
 #include <stdexcept>
+#include <iostream>
+using std::cout;
+using std::endl;
 
 namespace hdl {
   bool checkInputs(Gate &g,PinValues &inpValues) {
