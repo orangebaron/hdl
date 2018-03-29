@@ -20,13 +20,25 @@ namespace hdl {
       names.push_back(p.name);
     }
   }
+  void checkNormalGate(NormalGate &n) {
+    PinValues inps;
+    for (auto p: n.getInps()) {
+      inps.push_back({});
+      inps.back().resize(p);
+    }
+    auto otps = n.getOtpValues(inps);
+    auto expectedOtps = n.getOtps();
+    if (expectedOtps.size() != otps.size()) throw std::invalid_argument("gate output values");
+    { size_t counter = 0;
+      for (auto v: otps) if (v.size()!=expectedOtps[counter++])  throw std::invalid_argument("gate output values"); }
+  }
   NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate):
-    inps(inps),otps(otps),gates({gate}) {}
+    inps(inps),otps(otps),gates({gate}) { checkNormalGate(*this); }
   NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates):
-    inps(inps),otps(otps),gates(gates) {}
+    inps(inps),otps(otps),gates(gates) { checkNormalGate(*this); }
   Pins NormalGate::getInps() { return inps.pins; }
   Pins NormalGate::getOtps() { return otps.pins; }
-  PinValues NormalGate::getOtpValues(PinValues inpValues) { //TODO: check if inpValues are right size
+  PinValues NormalGate::getOtpValues(PinValues inpValues) {
     checkInputs(*this,inpValues);
     std::map<PinIdentifier,PinValue> values;
     { char counter = 0;

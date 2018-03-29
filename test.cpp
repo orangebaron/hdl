@@ -5,17 +5,30 @@ using namespace hdl;
 using std::cout;
 using std::endl;
 
+void err(int line) {
+  cout<<"ERROR AT LINE "<<line<<endl;
+}
 int main() {
   NandGate NAND;
-  cout<<"0 NAND 0: "<<(NAND.getOtpValues({{false},{false}})[0][0]?"1":"0")<<endl;
-  cout<<"0 NAND 1: "<<(NAND.getOtpValues({{false},{true}})[0][0]?"1":"0")<<endl;
-  cout<<"1 NAND 0: "<<(NAND.getOtpValues({{true},{false}})[0][0]?"1":"0")<<endl;
-  cout<<"1 NAND 1: "<<(NAND.getOtpValues({{true},{true}})[0][0]?"1":"0")<<endl;
+  if (!NAND.getOtpValues({{false},{false}})[0][0]) err(__LINE__);
+  if (!NAND.getOtpValues({{false},{true }})[0][0]) err(__LINE__);
+  if (!NAND.getOtpValues({{true },{false}})[0][0]) err(__LINE__);
+  if ( NAND.getOtpValues({{true },{true }})[0][0]) err(__LINE__);
   NormalGate NOT {
     {1,"in"},
     {1,"out"},
     {NAND,{"in","in"},{"out"}}
   };
-  cout<<"NOT 0: "<<(NOT.getOtpValues({{false}})[0][0]?"1":"0")<<endl;
-  cout<<"NOT 1: "<<(NOT.getOtpValues({{true}})[0][0]?"1":"0")<<endl;
+  if (!NOT.getOtpValues({{false}})[0][0]) err(__LINE__);
+  if ( NOT.getOtpValues({{true }})[0][0]) err(__LINE__);
+  NormalGate AND {
+    {{1,"a"},{1,"b"}},
+    {1,"out"},
+    {{NAND,{"a","b"},{"nand"}},
+      {NOT,{"nand"},{"out"}}}
+  };
+  if ( AND.getOtpValues({{false},{false}})[0][0]) err(__LINE__);
+  if ( AND.getOtpValues({{false},{true }})[0][0]) err(__LINE__);
+  if ( AND.getOtpValues({{true },{false}})[0][0]) err(__LINE__);
+  if (!AND.getOtpValues({{true },{true }})[0][0]) err(__LINE__);
 }
