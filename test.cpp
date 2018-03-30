@@ -15,6 +15,7 @@ int main() {
   if (!NAND.getOtpValues({{true },{false}})[0][0]) err(__LINE__);
   if ( NAND.getOtpValues({{true },{true }})[0][0]) err(__LINE__);
   NormalGate NOT {
+    "NOT",
     {1,"in"},
     {1,"out"},
     {NAND,{"in","in"},{"out"}}
@@ -22,6 +23,7 @@ int main() {
   if (!NOT.getOtpValues({{false}})[0][0]) err(__LINE__);
   if ( NOT.getOtpValues({{true }})[0][0]) err(__LINE__);
   NormalGate AND {
+    "AND",
     {{1,"a"},{1,"b"}},
     {1,"out"},
     {{NAND,{"a","b"},{"nand"}},
@@ -43,9 +45,10 @@ int main() {
   repDigDecl(7);
   #undef repDigDecl
   NormalGate AND8 {
+    "AND8",
     {{8,"a"},{8,"b"}},
     {8,"out"},
-    #define repDigChip(x) {RepeaterDig##x,{"a"},{"a"#x}},{RepeaterDig##x,{"b"},{"b"#x}}
+    #define repDigChip(x) {*new RepeaterGate{{{8,x}}},{"a"},{"a"#x}},{*new RepeaterGate{{{8,x}}},{"b"},{"b"#x}}
     #define andChip(x) {AND,{"a"#x,"b"#x},{"ab"#x}}
     { repDigChip(0),
       repDigChip(1),
@@ -63,7 +66,7 @@ int main() {
       andChip(5),
       andChip(6),
       andChip(7),
-      {Merge8,{"ab0","ab1","ab2","ab3","ab4","ab5","ab6","ab7"},{"out"}}
+      {*new RepeaterGate{{{},{},{},{},{},{},{},{}}},{"ab0","ab1","ab2","ab3","ab4","ab5","ab6","ab7"},{"out"}}
     }
     #undef repDigChip
   };

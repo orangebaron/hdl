@@ -7,7 +7,7 @@
 #include <iostream>
 
 namespace hdl {
-  GateInstance::GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames):
+  GateInstance::GateInstance(const Gate& gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames):
     gate(gate),inpNames(inpNames),otpNames(otpNames) {}
   AliasedPin::AliasedPin(Pin pin,PinIdentifier name):
     pin(pin),name(name) {}
@@ -29,17 +29,18 @@ namespace hdl {
     }
     auto otps = n.getOtpValues(inps);
     auto expectedOtps = n.getOtps();
-    //if (expectedOtps.size() != otps.size()) throw std::invalid_argument("gate output values");
+    //if (expectedOtps.size() != otps.size()) throw std::invalid_argument(n.getName()+": gate output values");
     //{ size_t counter = 0;
-    //  for (auto v: otps) if (v.size()!=expectedOtps[counter++])  throw std::invalid_argument("gate output values"); }
+    //  for (auto v: otps) if (v.size()!=expectedOtps[counter++])  throw std::invalid_argument(n.getName()+": gate output values"); }
   }
-  NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates):
-    inps(inps),otps(otps),gates(gates) { checkNormalGate(*this); }
-  NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate):
-    NormalGate(inps,otps,std::vector<GateInstance>{gate}) {}
-  Pins NormalGate::getInps() { return inps.pins; }
-  Pins NormalGate::getOtps() { return otps.pins; }
-  PinValues NormalGate::getOtpValues(PinValues inpValues) {
+  NormalGate::NormalGate(std::string name,AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates):
+    name(name),inps(inps),otps(otps),gates(gates) { checkNormalGate(*this); }
+  NormalGate::NormalGate(std::string name,AliasedPins inps,AliasedPins otps,GateInstance gate):
+    NormalGate(name,inps,otps,std::vector<GateInstance>{gate}) {}
+  std::string NormalGate::getName() const { return name; }
+  Pins NormalGate::getInps() const { return inps.pins; }
+  Pins NormalGate::getOtps() const { return otps.pins; }
+  PinValues NormalGate::getOtpValues(PinValues inpValues) const {
     checkInputs(*this,inpValues);
     std::map<PinIdentifier,PinValue> values;
     { char counter = 0;

@@ -6,17 +6,22 @@
 #include <stdexcept>
 
 namespace hdl {
-  Pins RepeaterGate::getInps() {
+  std::string RepeaterGate::getName() const {
+    std::string retVal = "repeater";
+    for (auto i: inps) retVal += ";"+std::to_string(i.fullSize)+","+std::to_string(i.sampleStart)+","+std::to_string(i.sampleSize);
+    return retVal;
+  }
+  Pins RepeaterGate::getInps() const {
     Pins returnVal;
     for (auto i: inps) returnVal.push_back(i.fullSize);
     return returnVal;
   }
-  Pins RepeaterGate::getOtps() {
+  Pins RepeaterGate::getOtps() const {
     size_t returnVal;
     for (auto i: inps) returnVal += i.sampleSize;
     return {returnVal};
   }
-  PinValues RepeaterGate::getOtpValues(PinValues inpValues) {
+  PinValues RepeaterGate::getOtpValues(PinValues inpValues) const {
     checkInputs(*this,inpValues);
     PinValue returnVal;
     for (size_t i=0;i<inps.size();i++)

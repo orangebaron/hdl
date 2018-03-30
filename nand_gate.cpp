@@ -5,9 +5,10 @@
 #include "check_inputs.cpp"
 
 namespace hdl {
-  Pins NandGate::getInps() { return {1,1}; }
-  Pins NandGate::getOtps() { return {1}; }
-  PinValues NandGate::getOtpValues(PinValues inpValues) {
+  std::string NandGate::getName() const { return "NAND"; }
+  Pins NandGate::getInps() const { return {1,1}; }
+  Pins NandGate::getOtps() const { return {1}; }
+  PinValues NandGate::getOtpValues(PinValues inpValues) const {
     checkInputs(*this,inpValues);
     return {{!(inpValues[0][0]&&inpValues[1][0])}};
   }

@@ -5,9 +5,10 @@
 
 namespace hdl {
   struct NandGate: public Gate {
-  	virtual Pins getInps();
-  	virtual Pins getOtps();
-  	virtual PinValues getOtpValues(PinValues inpValues);
+    virtual std::string getName() const;
+  	virtual Pins getInps() const;
+  	virtual Pins getOtps() const;
+  	virtual PinValues getOtpValues(PinValues inpValues) const;
   } NAND;
 }
 

@@ -7,9 +7,9 @@
 namespace hdl {
   typedef std::string PinIdentifier;
   struct GateInstance {
-  	Gate &gate;
+  	const Gate &gate;
   	std::vector<PinIdentifier> inpNames, otpNames;
-    GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames);
+    GateInstance(const Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames);
   };
   struct AliasedPin {
   	Pin pin;
@@ -24,14 +24,16 @@ namespace hdl {
     AliasedPins(Pins pins,std::vector<PinIdentifier> names);
   };
   struct NormalGate: public Gate {
+    std::string name;
     AliasedPins inps;
     AliasedPins otps;
   	std::vector<GateInstance> gates;
-    NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates);
-    NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate);
-  	virtual Pins getInps();
-    virtual Pins getOtps();
-    virtual PinValues getOtpValues(PinValues inpValues);
+    NormalGate(std::string name,AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates);
+    NormalGate(std::string name,AliasedPins inps,AliasedPins otps,GateInstance gate);
+    virtual std::string getName() const;
+  	virtual Pins getInps() const;
+    virtual Pins getOtps() const;
+    virtual PinValues getOtpValues(PinValues inpValues) const;
   };
 }
 

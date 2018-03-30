@@ -10,9 +10,10 @@ namespace hdl {
   typedef std::vector<bool> PinValue;
   typedef std::vector<PinValue> PinValues;
   struct Gate {
-  	virtual Pins getInps() = 0;
-  	virtual Pins getOtps() = 0;
-  	virtual PinValues getOtpValues(PinValues inpValues) = 0;
+  	virtual std::string getName() const = 0;
+  	virtual Pins getInps() const = 0;
+  	virtual Pins getOtps() const = 0;
+  	virtual PinValues getOtpValues(PinValues inpValues) const = 0;
   };
 }
 

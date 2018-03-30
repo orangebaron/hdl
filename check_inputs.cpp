@@ -6,11 +6,11 @@
 #include <iostream>
 
 namespace hdl {
-  void checkInputs(Gate &g,PinValues &inpValues) {
+  void checkInputs(const Gate &g,PinValues &inpValues) {
     auto i = g.getInps();
-    if (i.size() != inpValues.size()) throw std::invalid_argument("gate input values");
+    if (i.size() != inpValues.size()) throw std::invalid_argument(g.getName()+": gate input values 1");
     { size_t counter = 0;
-      for (auto v: inpValues) if (v.size()!=i[counter++]) throw std::invalid_argument("gate input values"); }
+      for (auto v: inpValues) if (v.size()!=i[counter++]) throw std::invalid_argument(g.getName()+": gate input values 2"); }
   }
 }
 
