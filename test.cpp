@@ -17,24 +17,18 @@ int main() {
   NormalGate NOT {
     {1,"in"},
     {1,"out"},
-    {NAND,{{"in"},{"in"}},{"out"}}
+    {NAND,{"in","in"},{"out"}}
   };
   if (!NOT.getOtpValues({{false}})[0][0]) err(__LINE__);
   if ( NOT.getOtpValues({{true }})[0][0]) err(__LINE__);
   NormalGate AND {
     {{1,"a"},{1,"b"}},
     {1,"out"},
-    {{NAND,{{"a"},{"b"}},{"nand"}},
-     {NOT,{{"nand"}},{"out"}}}
+    {{NAND,{"a","b"},{"nand"}},
+     {NOT,{"nand"},{"out"}}}
   };
   if ( AND.getOtpValues({{false},{false}})[0][0]) err(__LINE__);
   if ( AND.getOtpValues({{false},{true }})[0][0]) err(__LINE__);
   if ( AND.getOtpValues({{true },{false}})[0][0]) err(__LINE__);
   if (!AND.getOtpValues({{true },{true }})[0][0]) err(__LINE__);
-  NormalGate NAND4 {
-    {{4,"a"},{4,"b"}},
-    {4,"out"},
-    {{NAND,{{"a",0},{"b",0}},{"nand"}},
-     {NOT,{{"nand"}},{"out"}}}
-  };
 }

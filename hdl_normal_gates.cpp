@@ -6,14 +6,8 @@
 #include <map>
 
 namespace hdl {
-  PinSlice::PinSlice(PinIdentifier name,Pin start,Pin end):
-    name(name),start(start),end(end) {}
-  PinSlice::PinSlice(PinIdentifier name,Pin pinNum):
-    PinSlice(name,pinNum,pinNum+1) {}
-  PinSlice::PinSlice(PinIdentifier name):
-    PinSlice(name,0,0) {}
-  GateInstance::GateInstance(Gate &gate,GateIO inps,GateIO otps):
-    gate(gate),inps(inps),otps(otps) {}
+  GateInstance::GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames):
+    gate(gate),inpNames(inpNames),otpNames(otpNames) {}
   AliasedPin::AliasedPin(Pin pin,PinIdentifier name):
     pin(pin),name(name) {}
   AliasedPins::AliasedPins(Pin pin,PinIdentifier name):
@@ -51,17 +45,7 @@ namespace hdl {
       for (auto p: inps.names) values[p] = inpValues[counter++]; }
     for (auto g: gates) {
       PinValues inps;
-      for (auto p: g.inps) {
-        PinValue inpVal;
-        for (auto i: p)
-          if (i.start==i.end)
-            for (size_t j=0;j<values[i.name].size();j++)
-              inpVal.push_back(values[i.name][j]);
-          else
-            for (size_t j = i.start;j<i.end;i.start<i.end?j++:j--)
-              inpVal.push_back(values[i.name][j]);
-        inps.push_back(inpVal);
-      }
+      for (auto p: g.inpNames) inps.push_back(values[p]);
       auto otps = g.gate.getOtpValues(inps);
       { char counter = 0;
         for (auto p: otps) values[g.otpNames[counter++]] = p; }
