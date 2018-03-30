@@ -31,7 +31,7 @@ int main() {
   if ( AND.getOtpValues({{false},{true }})[0][0]) err(__LINE__);
   if ( AND.getOtpValues({{true },{false}})[0][0]) err(__LINE__);
   if (!AND.getOtpValues({{true },{true }})[0][0]) err(__LINE__);
-  RepeaterGate Merge8{{{},{},{},{},{},{},{}}};
+  RepeaterGate Merge8{{{},{},{},{},{},{},{},{}}};
   #define repDigDecl(x) RepeaterGate RepeaterDig##x {{{8,x}}};
   repDigDecl(0);
   repDigDecl(1);
@@ -44,9 +44,9 @@ int main() {
   #undef repDigDecl
   NormalGate AND8 {
     {{8,"a"},{8,"b"}},
-    {1,"out"},
-    #define repDigChip(x) {RepeaterDig##x,{"a"},{"a##x"}},{RepeaterDig##x,{"b"},{"b##x"}}
-    #define andChip(x) {AND,{"a##x","b##x"},{"ab##x"}}
+    {8,"out"},
+    #define repDigChip(x) {RepeaterDig##x,{"a"},{"a"#x}},{RepeaterDig##x,{"b"},{"b"#x}}
+    #define andChip(x) {AND,{"a"#x,"b"#x},{"ab"#x}}
     { repDigChip(0),
       repDigChip(1),
       repDigChip(2),
@@ -63,16 +63,12 @@ int main() {
       andChip(5),
       andChip(6),
       andChip(7),
-      {AND,{"ab0","ab1"},{"ab01"}},
-      {AND,{"ab2","ab3"},{"ab23"}},
-      {AND,{"ab4","ab5"},{"ab45"}},
-      {AND,{"ab6","ab7"},{"ab67"}},
-      {AND,{"ab01","ab23"},{"ab0123"}},
-      {AND,{"ab45","ab67"},{"ab4567"}},
-      {AND,{"ab0123","ab4567"},{"out"}}
+      {Merge8,{"ab0","ab1","ab2","ab3","ab4","ab5","ab6","ab7"},{"out"}}
     }
     #undef repDigChip
   };
-  std::cout<<(AND8.getOtpValues({{true,true,false,true,false,false,true,true},
-    {true,true,false,true,false,false,true,true}})[0][0]?"true":"false")<<endl;
+  auto vals = AND8.getOtpValues({{false,true,false,false,false,false,true,true},
+    {true,false,true,false,false,true,true,true}});
+  for (size_t i=0;i<=5;i++) if ( vals[0][i]) err(__LINE__);
+  for (size_t i=6;i< 8;i++) if (!vals[0][i]) err(__LINE__);
 }

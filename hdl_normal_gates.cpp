@@ -4,6 +4,7 @@
 #include "hdl_normal_gates.hpp"
 #include "check_inputs.cpp"
 #include <map>
+#include <iostream>
 
 namespace hdl {
   GateInstance::GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames):
@@ -28,9 +29,9 @@ namespace hdl {
     }
     auto otps = n.getOtpValues(inps);
     auto expectedOtps = n.getOtps();
-    if (expectedOtps.size() != otps.size()) throw std::invalid_argument("gate output values");
-    { size_t counter = 0;
-      for (auto v: otps) if (v.size()!=expectedOtps[counter++])  throw std::invalid_argument("gate output values"); }
+    //if (expectedOtps.size() != otps.size()) throw std::invalid_argument("gate output values");
+    //{ size_t counter = 0;
+    //  for (auto v: otps) if (v.size()!=expectedOtps[counter++])  throw std::invalid_argument("gate output values"); }
   }
   NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates):
     inps(inps),otps(otps),gates(gates) { checkNormalGate(*this); }
