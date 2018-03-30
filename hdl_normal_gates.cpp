@@ -48,7 +48,7 @@ namespace hdl {
       for (auto p: g.inpNames) inps.push_back(values[p]);
       auto otps = g.gate.getOtpValues(inps);
       { char counter = 0;
-        for (auto p: otps) values[g.otpNames[counter++]] = p; }
+        for (auto p: otps) values[g.otpNames[counter++]] = p; } //TODO: check that 2 things don't write to the same value
     }
     PinValues otpValues;
     for (auto p: otps.names) otpValues.push_back(values[p]);

@@ -8,7 +8,7 @@ namespace hdl {
   	virtual Pins getInps();
   	virtual Pins getOtps();
   	virtual PinValues getOtpValues(PinValues inpValues);
-  };
+  } NAND;
 }
 
 #endif
