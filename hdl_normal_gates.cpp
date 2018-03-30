@@ -6,8 +6,14 @@
 #include <map>
 
 namespace hdl {
-  GateInstance::GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames):
-    gate(gate),inpNames(inpNames),otpNames(otpNames) {}
+  PinSlice::PinSlice(PinIdentifier name,Pin start,Pin end):
+    name(name),start(start),end(end) {}
+  PinSlice::PinSlice(PinIdentifier name,Pin pinNum):
+    PinSlice(name,pinNum,pinNum+1) {}
+  PinSlice::PinSlice(PinIdentifier name):
+    PinSlice(name,0,0) {}
+  GateInstance::GateInstance(Gate &gate,GateIO inps,GateIO otps):
+    gate(gate),inps(inps),otps(otps) {}
   AliasedPin::AliasedPin(Pin pin,PinIdentifier name):
     pin(pin),name(name) {}
   AliasedPins::AliasedPins(Pin pin,PinIdentifier name):
@@ -32,10 +38,10 @@ namespace hdl {
     { size_t counter = 0;
       for (auto v: otps) if (v.size()!=expectedOtps[counter++])  throw std::invalid_argument("gate output values"); }
   }
-  NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate):
-    inps(inps),otps(otps),gates({gate}) { checkNormalGate(*this); }
   NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates):
     inps(inps),otps(otps),gates(gates) { checkNormalGate(*this); }
+  NormalGate::NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate):
+    NormalGate(inps,otps,std::vector<GateInstance>{gate}) {}
   Pins NormalGate::getInps() { return inps.pins; }
   Pins NormalGate::getOtps() { return otps.pins; }
   PinValues NormalGate::getOtpValues(PinValues inpValues) {
@@ -45,7 +51,17 @@ namespace hdl {
       for (auto p: inps.names) values[p] = inpValues[counter++]; }
     for (auto g: gates) {
       PinValues inps;
-      for (auto p: g.inpNames) inps.push_back(values[p]);
+      for (auto p: g.inps) {
+        PinValue inpVal;
+        for (auto i: p)
+          if (i.start==i.end)
+            for (size_t j=0;j<values[i.name].size();j++)
+              inpVal.push_back(values[i.name][j]);
+          else
+            for (size_t j = i.start;j<i.end;i.start<i.end?j++:j--)
+              inpVal.push_back(values[i.name][j]);
+        inps.push_back(inpVal);
+      }
       auto otps = g.gate.getOtpValues(inps);
       { char counter = 0;
         for (auto p: otps) values[g.otpNames[counter++]] = p; }

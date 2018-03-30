@@ -5,7 +5,7 @@
 #include <string>
 
 namespace hdl {
-  typedef unsigned int Pin; //number of digits in this pin
+  typedef size_t Pin; //number of digits in this pin
   typedef std::vector<Pin> Pins;
   typedef std::vector<bool> PinValue;
   typedef std::vector<PinValue> PinValues;

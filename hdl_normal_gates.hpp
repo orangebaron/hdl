@@ -6,11 +6,23 @@
 
 namespace hdl {
   typedef std::string PinIdentifier;
+  struct PinSlice {
+    PinIdentifier name;
+    Pin start, end;
+    PinSlice(PinIdentifier name,Pin start,Pin end);
+    PinSlice(PinIdentifier name,Pin pinNum);
+    PinSlice(PinIdentifier name);
+  };
+  typedef std::vector<PinSlice> GateIO;
+  struct GateIOs {
+    std::vector<GateIO> ios;
+    GateIOs(std::vector<GateInput> inps);
+    GateIOs(std::vector<PinSlice> inputs);
+  };
   struct GateInstance {
   	Gate &gate;
-  	std::vector<PinIdentifier> inpNames;
-  	std::vector<PinIdentifier> otpNames;
-    GateInstance(Gate &gate,std::vector<PinIdentifier> inpNames,std::vector<PinIdentifier> otpNames);
+  	GateIO inps, otps;
+    GateInstance(Gate &gate,GateIO inps,GateIO otps);
   };
   struct AliasedPin {
   	Pin pin;
@@ -28,8 +40,8 @@ namespace hdl {
     AliasedPins inps;
     AliasedPins otps;
   	std::vector<GateInstance> gates;
-    NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate);
     NormalGate(AliasedPins inps,AliasedPins otps,std::vector<GateInstance> gates);
+    NormalGate(AliasedPins inps,AliasedPins otps,GateInstance gate);
   	virtual Pins getInps();
     virtual Pins getOtps();
     virtual PinValues getOtpValues(PinValues inpValues);
