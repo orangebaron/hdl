@@ -8,7 +8,7 @@ namespace hdl {
     virtual std::string getName() const;
   	virtual Pins getInps() const;
   	virtual Pins getOtps() const;
-  	virtual PinValues getOtpValues(PinValues inpValues) const;
+  	virtual PinValues getOtpValues(PinValues inpValues);
     struct InputSlice {
       size_t fullSize, sampleStart, sampleSize;
       InputSlice(size_t fullSize=1,size_t sampleStart=0,size_t sampleSize=1);

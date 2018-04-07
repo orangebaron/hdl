@@ -21,7 +21,7 @@ namespace hdl {
     for (auto i: inps) returnVal += i.sampleSize;
     return {returnVal};
   }
-  PinValues RepeaterGate::getOtpValues(PinValues inpValues) const {
+  PinValues RepeaterGate::getOtpValues(PinValues inpValues) {
     checkInputs(*this,inpValues);
     PinValue returnVal;
     for (size_t i=0;i<inps.size();i++)

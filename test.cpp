@@ -1,6 +1,7 @@
 #include "hdl_normal_gates.cpp"
 #include "nand_gate.cpp"
 #include "repeater_gate.cpp"
+#include "flip_flop.cpp"
 #include <iostream>
 using namespace hdl;
 using std::cout;
@@ -74,4 +75,15 @@ int main() {
     {true,false,true,false,false,true,true,true}});
   for (size_t i=0;i<=5;i++) if ( vals[0][i]) err(__LINE__);
   for (size_t i=6;i< 8;i++) if (!vals[0][i]) err(__LINE__);
+
+  FlipFlop ff;
+  if ( ff.getOtpValues({{false},{true },{false},{false}})[0][0]) err(__LINE__);
+  if (!ff.getOtpValues({{true },{true },{false},{false}})[0][0]) err(__LINE__);
+  if (!ff.getOtpValues({{true },{false},{false},{false}})[0][0]) err(__LINE__);
+  if (!ff.getOtpValues({{false},{false},{false},{false}})[0][0]) err(__LINE__);
+  if ( ff.getOtpValues({{true },{false},{false},{false}})[0][0]) err(__LINE__);
+  if (!ff.getOtpValues({{true },{false},{true },{false}})[0][0]) err(__LINE__);
+  if ( ff.getOtpValues({{true },{false},{false},{true }})[0][0]) err(__LINE__);
+  if ( ff.getOtpValues({{false},{false},{false},{false}})[0][0]) err(__LINE__);
+  if ( ff.getOtpValues({{true },{false},{false},{true }})[0][0]) err(__LINE__);
 }

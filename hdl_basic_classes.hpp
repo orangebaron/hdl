@@ -13,7 +13,7 @@ namespace hdl {
   	virtual std::string getName() const = 0;
   	virtual Pins getInps() const = 0;
   	virtual Pins getOtps() const = 0;
-  	virtual PinValues getOtpValues(PinValues inpValues) const = 0;
+  	virtual PinValues getOtpValues(PinValues inpValues) = 0;
   };
 }
 

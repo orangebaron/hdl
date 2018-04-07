@@ -8,7 +8,7 @@ namespace hdl {
     virtual std::string getName() const;
   	virtual Pins getInps() const;
   	virtual Pins getOtps() const;
-  	virtual PinValues getOtpValues(PinValues inpValues) const;
+  	virtual PinValues getOtpValues(PinValues inpValues);
   } NAND;
 }
 
