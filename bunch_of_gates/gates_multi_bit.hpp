@@ -6,7 +6,7 @@
 
 namespace hdl_bunch_of_gates {
   using hdl::RepeaterGate;
-  
+
   RepeaterGate r8_0 {{{8,0}}};
   RepeaterGate r8_1 {{{8,1}}};
   RepeaterGate r8_2 {{{8,2}}};

@@ -71,6 +71,21 @@ namespace hdl_bunch_of_gates {
       {AND,{"in","!sel"},{"a"}},
       {AND,{"in","sel"},{"b"}}}
   };
+  NormalGate HALFADDER {
+    "HALFADDER",
+    {{1,"a"},{1,"b"}},
+    {{1,"out"},{1,"carry"}},
+    { {XOR,{"a","b"},{"out"}},
+      {AND,{"a","b"},{"carry"}}}
+  };
+  NormalGate FULLADDER {
+    "FULLADDER",
+    {{1,"a"},{1,"b"},{1,"c"}},
+    {{1,"out"},{1,"carry"}},
+    { {HALFADDER,{"a","b"},{"o1","c1"}},
+      {HALFADDER,{"c","o1"},{"out","c2"}},
+      {OR,{"c1","c2"},{"out"}}}
+  };
 }
 
 #endif
